@@ -1,0 +1,1 @@
+export default function InstitucionalLayout({ children }: Readonly<{ children: React.ReactNode }>) { return <div className="prose institucional"><p className="eyebrow">Leque de Vagas</p>{children}</div>; }
