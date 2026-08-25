@@ -1,0 +1,2 @@
+import Link from "next/link";
+export default function Home() { return <section className="hero"><p className="eyebrow">Tecnologia para novos começos</p><h1>Encontre seu próximo passo.</h1><p>O Leque de Vagas reúne oportunidades de tecnologia acolhedoras para pessoas em transição de carreira.</p><div className="acoes"><Link className="botao" href="/vagas">Ver vagas</Link><Link className="botao-secundario" href="/sobre">Sobre o projeto</Link></div></section>; }
