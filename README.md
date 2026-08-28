@@ -19,7 +19,7 @@ npm start
 
 ## Aula 01 — ambiente e componentes
 
-O projeto usa Next.js 16.3.2, App Router, TypeScript e CSS comum. Um componente é uma parte independente da interface que pode ser reutilizada. Escrever o cabeçalho uma vez no arquivo `components/Cabecalho.tsx` e colocá-lo no layout evita duplicação e faz qualquer mudança aparecer em todas as páginas.
+O projeto usa Next.js 16.3.2, App Router, TypeScript, Tailwind CSS e componentes no padrão shadcn/ui. Um componente é uma parte independente da interface que pode ser reutilizada. Escrever o cabeçalho uma vez no arquivo `components/Cabecalho.tsx` e colocá-lo no layout evita duplicação e faz qualquer mudança aparecer em todas as páginas.
 
 O cabeçalho usa `Link` para navegação interna e o layout define metadata para o título da aba. A rota `/sobre` também está ligada à home.
 

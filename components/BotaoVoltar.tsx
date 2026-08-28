@@ -1,12 +1,11 @@
 "use client";
-
 import { useRouter } from "next/navigation";
-
+import { Button } from "@/components/ui/button";
 export default function BotaoVoltar() {
   const router = useRouter();
   return (
-    <button type="button" className="botao-secundario" onClick={() => router.back()}>
+    <Button variant="secondary" size="sm" onClick={() => router.back()}>
       ← Voltar
-    </button>
+    </Button>
   );
 }
