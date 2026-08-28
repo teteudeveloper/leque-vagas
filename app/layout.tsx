@@ -11,7 +11,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="pt-BR">
       <body>
         <Cabecalho />
-        <main className="container">{children}</main>
+        <main className="mx-auto w-[min(1080px,calc(100%-2.5rem))]">{children}</main>
       </body>
     </html>
   );
