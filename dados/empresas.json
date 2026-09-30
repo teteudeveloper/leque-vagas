@@ -1,0 +1,20 @@
+[
+  {
+    "slug": "aurora-tech",
+    "nome": "Aurora Tech",
+    "sobre": "Empresa de produto digital que monta times de Front-end e Dados com espaço para quem está começando na tecnologia.",
+    "site": "https://aurora-tech.example.com"
+  },
+  {
+    "slug": "nuvem-norte",
+    "nome": "Nuvem Norte",
+    "sobre": "Consultoria de software que constrói APIs e cuida da qualidade de sistemas usados por empresas de todo o país.",
+    "site": "https://nuvem-norte.example.com"
+  },
+  {
+    "slug": "mare-digital",
+    "nome": "Maré Digital",
+    "sobre": "Estúdio de aplicativos móveis que une design e engenharia para criar experiências acessíveis.",
+    "site": "https://mare-digital.example.com"
+  }
+]
