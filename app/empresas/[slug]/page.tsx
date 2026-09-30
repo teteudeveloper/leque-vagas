@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { listarEmpresas, buscarEmpresa, listarVagas } from "@/lib/api";
+import CardDeVaga from "@/components/CardDeVaga";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -27,5 +28,22 @@ export default async function Empresa({ params }: Props) {
   if (!empresa) notFound();
   // O filtro acontece no servidor: o navegador recebe só as vagas desta empresa.
   const vagasDaEmpresa = vagas.filter((vaga) => vaga.empresaSlug === empresa.slug);
-  return <section><Link className="voltar-link" href="/vagas">← Todas as vagas</Link><p className="eyebrow">Empresa</p><h1>{empresa.nome}</h1><p className="subtitulo">{vagasDaEmpresa.length} oportunidades abertas</p><ul className="lista-vagas">{vagasDaEmpresa.map((vaga) => <li key={vaga.id}><Link href={`/vagas/${vaga.id}`}><span><strong>{vaga.titulo}</strong><small>{vaga.area} · {vaga.local}</small></span><span className="seta">→</span></Link></li>)}</ul></section>;
+  return (
+    <section>
+      <Link className="voltar-link" href="/vagas">← Todas as vagas</Link>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+        <div>
+          <p className="eyebrow">Empresa</p>
+          <h1>{empresa.nome}</h1>
+        </div>
+        <Link className="botao-secundario" href={`/empresas/${empresa.slug}/editar`}>Editar perfil</Link>
+      </div>
+      <p className="subtitulo">{vagasDaEmpresa.length} oportunidades abertas</p>
+      <div className="lista-vagas" style={{ display: 'grid', gap: '1rem', padding: 0 }}>
+        {vagasDaEmpresa.map((vaga) => (
+          <CardDeVaga key={vaga.id} vaga={vaga} />
+        ))}
+      </div>
+    </section>
+  );
 }

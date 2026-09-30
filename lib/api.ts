@@ -1,4 +1,4 @@
-import type { Vaga, Empresa } from "@/lib/tipos";
+import type { Vaga, Empresa, Candidatura } from "@/lib/tipos";
 
 // A URL mora aqui, e só aqui. Quando a fonte trocar — a API do Spring Boot,
 // um banco, o que for — é ESTA linha que muda, e nenhuma página fica sabendo.
@@ -16,16 +16,26 @@ const CACHE_VAGAS = { next: { revalidate: 300, tags: ["vagas"] } };
 // a pergunta "quão fresco esse dado precisa estar?".
 const CACHE_EMPRESAS = { next: { revalidate: 3600, tags: ["empresas"] } };
 
-export async function listarVagas(): Promise<Vaga[]> {
-  const resposta = await fetch(`${FONTE}/vagas.json`, CACHE_VAGAS);
+// ─── O DEPÓSITO ────────────────────────────────────────────────────────
+const criadas: Vaga[] = [];
+const arquivadas = new Set<string>();
+const candidaturas: Candidatura[] = [];
+const editadas = new Map<string, Empresa>();
 
-  // Sem esta linha, um 404 do GitHub vira uma página de erro em HTML, e o
-  // .json() abaixo quebra com "Unexpected token '<'".
+// ─── LEITURA ───────────────────────────────────────────────────────────
+async function buscarVagasPublicadas(): Promise<Vaga[]> {
+  const resposta = await fetch(`${FONTE}/vagas.json`, CACHE_VAGAS);
   if (!resposta.ok) {
     throw new Error(`vagas.json respondeu ${resposta.status}`);
   }
-
   return resposta.json();
+}
+
+export async function listarVagas(): Promise<Vaga[]> {
+  const publicadas = await buscarVagasPublicadas();
+
+  return [...criadas, ...publicadas]
+    .filter((vaga) => !arquivadas.has(vaga.id));
 }
 
 // Buscar UMA vaga é buscar todas e achar. As chamadas usam o MESMO fetch,
@@ -36,17 +46,37 @@ export async function buscarVaga(id: string): Promise<Vaga | undefined> {
   return vagas.find((vaga) => vaga.id === id);
 }
 
-export async function listarEmpresas(): Promise<Empresa[]> {
+async function buscarEmpresasPublicadas(): Promise<Empresa[]> {
   const resposta = await fetch(`${FONTE}/empresas.json`, CACHE_EMPRESAS);
-
   if (!resposta.ok) {
     throw new Error(`empresas.json respondeu ${resposta.status}`);
   }
-
   return resposta.json();
+}
+
+export async function listarEmpresas(): Promise<Empresa[]> {
+  const publicadas = await buscarEmpresasPublicadas();
+  return publicadas.map((e) => editadas.get(e.slug) ?? e);
 }
 
 export async function buscarEmpresa(slug: string): Promise<Empresa | undefined> {
   const empresas = await listarEmpresas();
   return empresas.find((empresa) => empresa.slug === slug);
+}
+
+// ─── ESCRITA ───────────────────────────────────────────────────────────
+export function guardarVaga(vaga: Vaga) {
+  criadas.unshift(vaga);
+}
+
+export function arquivarVaga(id: string) {
+  arquivadas.add(id);
+}
+
+export function guardarCandidatura(candidatura: Candidatura) {
+  candidaturas.push(candidatura);
+}
+
+export function guardarEmpresa(empresa: Empresa) {
+  editadas.set(empresa.slug, empresa);
 }
