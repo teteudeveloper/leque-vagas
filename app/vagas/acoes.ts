@@ -8,7 +8,7 @@ export async function arquivar(dados: FormData) {
   const analise = EsquemaDeArquivar.safeParse(Object.fromEntries(dados));
   if (!analise.success) return;
 
-  arquivarVaga(analise.data.id);
+  await arquivarVaga(analise.data.id);
 
   revalidatePath("/vagas");
 }
