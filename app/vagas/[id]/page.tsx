@@ -27,11 +27,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return { title: `${vaga.titulo} · ${vaga.empresa}`, description: vaga.descricao.slice(0, 150) };
 }
 
+import { prisma } from "@/lib/prisma";
+
 export default async function PaginaDaVaga({ params }: Props) {
   const { id } = await params;
   const vaga = await buscarVaga(id);
   // O id que não existe: notFound() interrompe a renderização e entrega o not-found.tsx.
   if (!vaga) notFound();
+
+  const totalCandidaturas = await prisma.candidatura.count({ where: { vagaId: id } });
+
   return (
     <article className="detalhe-vaga">
       <Link className="voltar-link" href="/vagas">← Todas as vagas</Link>
@@ -41,6 +46,9 @@ export default async function PaginaDaVaga({ params }: Props) {
           <h1>{vaga.titulo}</h1>
           <p className="empresa">{vaga.empresa} · {vaga.local}</p>
           <p className="descricao">{vaga.descricao}</p>
+          <p className="candidaturas-count" style={{ fontSize: '0.9rem', color: 'var(--muted)', marginTop: '0.5rem' }}>
+            {totalCandidaturas} {totalCandidaturas === 1 ? 'pessoa já se candidatou' : 'pessoas já se candidataram'} a esta vaga
+          </p>
           <div className="tags">
             <span>{vaga.senioridade}</span>
             <span>{vaga.local}</span>

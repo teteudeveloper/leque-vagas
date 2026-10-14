@@ -5,6 +5,8 @@ import { porCampo, valoresDe } from "@/lib/formulario";
 import { buscarVaga, guardarCandidatura } from "@/lib/api";
 import type { Estado } from "@/lib/tipos";
 
+import { prisma } from "@/lib/prisma";
+
 export async function enviarCandidatura(
   estadoAnterior: Estado,
   dados: FormData,
@@ -22,17 +24,16 @@ export async function enviarCandidatura(
     return { ok: false, erros: { habilidades: "Escolha ao menos uma habilidade." }, valores };
   }
 
-  const vaga = await buscarVaga(analise.data.vagaId);
+  const vaga = await prisma.vaga.findUnique({ where: { id: analise.data.vagaId } });
   if (!vaga) {
-    return { ok: false, erros: {}, valores, mensagem: "Essa vaga não existe mais." };
+    return { ok: false, erros: { vagaId: "Essa vaga não está mais disponível." }, valores };
   }
 
-  guardarCandidatura({
-    ...analise.data,
-    habilidades,
-    id: crypto.randomUUID(),
-    enviadaEm: new Date().toISOString(),
-  });
+  await prisma.candidatura.create({ data: {
+    nome: analise.data.nome,
+    email: analise.data.email,
+    vagaId: analise.data.vagaId
+  } });
 
   return { ok: true, erros: {}, valores: {}, mensagem: "Candidatura enviada!" };
 }

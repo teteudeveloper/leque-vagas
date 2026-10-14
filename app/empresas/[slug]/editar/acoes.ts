@@ -6,6 +6,8 @@ import { porCampo, valoresDe } from "@/lib/formulario";
 import { buscarEmpresa, guardarEmpresa } from "@/lib/api";
 import type { Estado } from "@/lib/tipos";
 
+import { prisma } from "@/lib/prisma";
+
 export async function salvarEmpresa(
   slug: string,
   estadoAnterior: Estado,
@@ -18,12 +20,11 @@ export async function salvarEmpresa(
     return { ok: false, erros: porCampo(analise.error), valores };
   }
 
-  const atual = await buscarEmpresa(slug);
-  if (!atual) {
-    return { ok: false, erros: {}, valores, mensagem: "Empresa não encontrada." };
-  }
-
-  guardarEmpresa({ ...atual, ...analise.data });
+  await prisma.empresa.upsert({
+    where:  { slug },
+    update: analise.data,
+    create: { slug, ...analise.data },
+  });
 
   revalidatePath(`/empresas/${slug}`);
   revalidatePath("/empresas");

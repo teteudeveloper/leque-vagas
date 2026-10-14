@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { EsquemaDaVaga } from "@/lib/esquemas";
 import { porCampo, valoresDe } from "@/lib/formulario";
 import { guardarVaga, buscarEmpresa } from "@/lib/api";
-import type { Estado } from "@/lib/tipos";
+import type { Estado, Vaga } from "@/lib/tipos";
 
 export async function criarVaga(
   estadoAnterior: Estado,
@@ -33,7 +33,7 @@ export async function criarVaga(
     id: crypto.randomUUID(),
     empresa: empresa.nome,
   };
-  guardarVaga(vaga);
+  await guardarVaga(vaga as Vaga);
 
   revalidatePath("/vagas");
 
