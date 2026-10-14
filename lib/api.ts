@@ -55,6 +55,9 @@ export async function guardarVaga(vaga: Vaga) {
 }
 
 export async function arquivarVaga(id: string) {
+  const existe = await prisma.vaga.findUnique({ where: { id } });
+  if (!existe) return; // vaga pública (JSON) — não está no banco
+
   await prisma.vaga.update({
     where: { id },
     data:  { arquivada: true },
