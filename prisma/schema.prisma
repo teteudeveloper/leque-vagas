@@ -1,9 +1,15 @@
+// Banco do Leque de Vagas.
+//
+// As vagas e empresas "de catálogo" moram em dados/*.json e são buscadas pela
+// rede (lib/api.ts). O banco guarda só o que nasce pelo site: vagas publicadas
+// no formulário, perfis de empresa editados e candidaturas.
+
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -19,11 +25,14 @@ model Vaga {
   descricao       String
   criadaEm        DateTime @default(now())
 
-  arquivada       Boolean  @default(false)
+  // Arquivar não apaga: a vaga some das listagens, mas o histórico fica.
+  arquivada Boolean @default(false)
 
-  candidaturas    Candidatura[]
+  @@index([arquivada, criadaEm])
+  @@index([empresaSlug])
 }
 
+// Uma linha aqui sobrepõe a empresa de mesmo slug que vem do JSON.
 model Empresa {
   slug      String   @id
   nome      String
@@ -32,11 +41,16 @@ model Empresa {
   editadaEm DateTime @updatedAt
 }
 
+// vagaId não é chave estrangeira de propósito: a vaga pode estar no banco OU
+// no JSON do catálogo. A existência da vaga é conferida na Server Action.
 model Candidatura {
-  id       String   @id @default(uuid())
-  nome     String
-  email    String
-  vagaId   String
-  vaga     Vaga     @relation(fields: [vagaId], references: [id])
-  criadaEm DateTime @default(now())
+  id          String   @id @default(uuid())
+  vagaId      String
+  nome        String
+  email       String
+  habilidades String[]
+  criadaEm    DateTime @default(now())
+
+  @@unique([vagaId, email])
+  @@index([vagaId])
 }

@@ -1,79 +1,127 @@
 "use client";
 
-import { useActionState } from "react";
-import { criarVaga } from "./acoes";
-import BotaoDeEnviar from "@/components/BotaoDeEnviar";
-import { ESTADO_INICIAL } from "@/lib/tipos";
+import AvisoDoFormulario from "@/components/formularios/AvisoDoFormulario";
+import BotaoDeEnviar from "@/components/formularios/BotaoDeEnviar";
+import { useFormulario } from "@/components/formularios/useFormulario";
+import Campo from "@/components/formularios/Campo";
+import { Input } from "@/components/ui/input";
+import { Select } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { AREAS, SENIORIDADES } from "@/lib/constantes";
 import type { Empresa } from "@/lib/tipos";
+import { criarVaga } from "./acoes";
 
 export default function FormularioDeVaga({ empresas }: { empresas: Empresa[] }) {
-  const [estado, acaoDoForm] = useActionState(criarVaga, ESTADO_INICIAL);
+  const { estado, pendente, envio, formulario } = useFormulario(criarVaga);
+  const { erros, valores } = estado;
 
   return (
-    <form action={acaoDoForm} className="form-nova-vaga">
-      <label>
-        Título
-        <input name="titulo" defaultValue={estado.valores.titulo} />
-      </label>
-      {estado.erros.titulo && <p className="erro">{estado.erros.titulo}</p>}
+    <form {...formulario} className="grid max-w-2xl gap-6">
+      {estado.mensagem && (
+        <AvisoDoFormulario key={envio} tipo="erro">
+          {estado.mensagem}
+        </AvisoDoFormulario>
+      )}
 
-      <label>
-        Empresa
-        <select name="empresaSlug" defaultValue={estado.valores.empresaSlug ?? ""}>
-          <option value="">Escolha…</option>
-          {empresas.map((e) => (
-            <option key={e.slug} value={e.slug}>{e.nome}</option>
-          ))}
-        </select>
-      </label>
-      {estado.erros.empresaSlug && <p className="erro">{estado.erros.empresaSlug}</p>}
+      <Campo
+        nome="titulo"
+        rotulo="Título da vaga"
+        erro={erros.titulo}
+        dica="Ex.: Pessoa Desenvolvedora Front-end Júnior"
+      >
+        {(controle) => <Input {...controle} maxLength={120} defaultValue={valores.titulo} />}
+      </Campo>
 
-      <label>
-        Área
-        <select name="area" defaultValue={estado.valores.area ?? ""}>
-          <option value="">Escolha…</option>
-          <option value="Front-end">Front-end</option>
-          <option value="Back-end">Back-end</option>
-          <option value="Full-stack">Full-stack</option>
-          <option value="Mobile">Mobile</option>
-          <option value="Dados">Dados</option>
-          <option value="QA">QA</option>
-          <option value="Design">Design</option>
-          <option value="Produto">Produto</option>
-        </select>
-      </label>
-      {estado.erros.area && <p className="erro">{estado.erros.area}</p>}
-      
-      <label>
-        Senioridade
-        <select name="senioridade" defaultValue={estado.valores.senioridade ?? ""}>
-          <option value="">Escolha…</option>
-          <option value="Júnior">Júnior</option>
-          <option value="Pleno">Pleno</option>
-          <option value="Sênior">Sênior</option>
-          <option value="Estágio">Estágio</option>
-        </select>
-      </label>
-      {estado.erros.senioridade && <p className="erro">{estado.erros.senioridade}</p>}
+      <Campo nome="empresaSlug" rotulo="Empresa" erro={erros.empresaSlug}>
+        {(controle) => (
+          <Select {...controle} defaultValue={valores.empresaSlug ?? ""}>
+            <option value="">Escolha a empresa…</option>
+            {empresas.map((empresa) => (
+              <option key={empresa.slug} value={empresa.slug}>
+                {empresa.nome}
+              </option>
+            ))}
+          </Select>
+        )}
+      </Campo>
 
-      <label>
-        Local
-        <input name="local" defaultValue={estado.valores.local} />
-      </label>
-      {estado.erros.local && <p className="erro">{estado.erros.local}</p>}
+      <div className="grid gap-6 sm:grid-cols-2">
+        <Campo nome="area" rotulo="Área" erro={erros.area}>
+          {(controle) => (
+            <Select {...controle} defaultValue={valores.area ?? ""}>
+              <option value="">Escolha a área…</option>
+              {AREAS.map((area) => (
+                <option key={area} value={area}>
+                  {area}
+                </option>
+              ))}
+            </Select>
+          )}
+        </Campo>
 
-      <label>
-        Descrição
-        <textarea name="descricao" defaultValue={estado.valores.descricao} />
-      </label>
-      {estado.erros.descricao && <p className="erro">{estado.erros.descricao}</p>}
+        <Campo nome="senioridade" rotulo="Senioridade" erro={erros.senioridade}>
+          {(controle) => (
+            <Select {...controle} defaultValue={valores.senioridade ?? ""}>
+              <option value="">Escolha a senioridade…</option>
+              {SENIORIDADES.map((senioridade) => (
+                <option key={senioridade} value={senioridade}>
+                  {senioridade}
+                </option>
+              ))}
+            </Select>
+          )}
+        </Campo>
+      </div>
 
-      <label className="checkbox">
-        <input type="checkbox" name="aceitaIniciante" defaultChecked={estado.valores.aceitaIniciante === "on"} />
-        Aceita quem está começando
+      <Campo
+        nome="local"
+        rotulo="Formato e local"
+        erro={erros.local}
+        dica="Ex.: Remoto; Híbrido · Recife; Presencial · São Paulo"
+      >
+        {(controle) => <Input {...controle} maxLength={80} defaultValue={valores.local} />}
+      </Campo>
+
+      <Campo
+        nome="descricao"
+        rotulo="Descrição"
+        erro={erros.descricao}
+        dica="Entre 80 e 2.000 caracteres. Separe os blocos com uma linha em branco, comece itens de lista com “- ” e termine subtítulos com “:”."
+      >
+        {(controle) => (
+          <Textarea
+            {...controle}
+            rows={10}
+            maxLength={2000}
+            placeholder={
+              "Apresente o time e o contexto da vaga.\n\nO que você vai fazer:\n- Primeira atividade\n- Segunda atividade\n\nO que esperamos:\n- Primeiro requisito"
+            }
+            defaultValue={valores.descricao}
+          />
+        )}
+      </Campo>
+
+      <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-slate-200 bg-white p-4 has-checked:border-violet-300 has-checked:bg-violet-50/60">
+        <input
+          type="checkbox"
+          name="aceitaIniciante"
+          defaultChecked={valores.aceitaIniciante === "on"}
+          className="mt-1 size-4 accent-violet-600"
+        />
+        <span>
+          <span className="block font-semibold text-slate-800">Aceita iniciantes</span>
+          <span className="block text-sm text-slate-500">
+            Marque se a vaga é aberta a pessoas em transição de carreira ou sem experiência
+            anterior.
+          </span>
+        </span>
       </label>
 
-      <BotaoDeEnviar enviando="Publicando…">Publicar vaga</BotaoDeEnviar>
+      <div>
+        <BotaoDeEnviar size="lg" enviando="Publicando…" pendente={pendente}>
+          Publicar vaga
+        </BotaoDeEnviar>
+      </div>
     </form>
   );
 }

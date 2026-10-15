@@ -1,39 +1,49 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
+import { buscarVaga, guardarCandidatura, type ResultadoDaCandidatura } from "@/lib/api";
+import { comErros, falhaAoSalvar } from "@/lib/acoes";
 import { EsquemaDaCandidatura } from "@/lib/esquemas";
-import { porCampo, valoresDe } from "@/lib/formulario";
-import { buscarVaga, guardarCandidatura } from "@/lib/api";
+import { camposDe, porCampo, valoresDe } from "@/lib/formulario";
 import type { Estado } from "@/lib/tipos";
 
-import { prisma } from "@/lib/prisma";
-
-export async function enviarCandidatura(
-  estadoAnterior: Estado,
-  dados: FormData,
-): Promise<Estado> {
+export async function enviarCandidatura(_estadoAnterior: Estado, dados: FormData): Promise<Estado> {
   const valores = valoresDe(dados);
 
-  const analise = EsquemaDaCandidatura.safeParse(Object.fromEntries(dados));
+  const analise = EsquemaDaCandidatura.safeParse({
+    ...camposDe(dados),
+    habilidades: dados.getAll("habilidades"),
+  });
   if (!analise.success) {
-    return { ok: false, erros: porCampo(analise.error), valores };
+    return comErros(porCampo(analise.error), valores, "Confira os campos destacados.");
   }
 
-  const habilidades = dados.getAll("habilidades").map(String);
-
-  if (habilidades.length === 0) {
-    return { ok: false, erros: { habilidades: "Escolha ao menos uma habilidade." }, valores };
+  // A vaga pode estar no banco ou no JSON do catálogo: buscarVaga olha os dois.
+  let titulo: string;
+  let resultado: ResultadoDaCandidatura;
+  try {
+    const vaga = await buscarVaga(analise.data.vagaId);
+    if (!vaga) return comErros({}, valores, "Esta vaga não está mais disponível.");
+    titulo = vaga.titulo;
+    resultado = await guardarCandidatura(analise.data);
+  } catch (erro) {
+    return falhaAoSalvar("candidatura", erro, valores);
   }
 
-  const vaga = await prisma.vaga.findUnique({ where: { id: analise.data.vagaId } });
-  if (!vaga) {
-    return { ok: false, erros: { vagaId: "Essa vaga não está mais disponível." }, valores };
+  if (resultado === "repetida") {
+    return comErros(
+      { email: "Este e-mail já foi usado em uma candidatura para esta vaga." },
+      valores,
+      "Já existe uma candidatura para esta vaga com o e-mail informado.",
+    );
   }
 
-  await prisma.candidatura.create({ data: {
-    nome: analise.data.nome,
-    email: analise.data.email,
-    vagaId: analise.data.vagaId
-  } });
+  revalidatePath(`/vagas/${analise.data.vagaId}`);
 
-  return { ok: true, erros: {}, valores: {}, mensagem: "Candidatura enviada!" };
+  return {
+    ok: true,
+    erros: {},
+    valores: {},
+    mensagem: `Sua candidatura para a vaga “${titulo}” foi registrada.`,
+  };
 }

@@ -13,6 +13,12 @@ export type Vaga = {
   descricao: string;
 };
 
+// De onde a vaga veio: do catálogo (JSON) ou publicada pelo site (banco).
+// Só as do site podem ser arquivadas.
+export type OrigemDaVaga = "catalogo" | "site";
+
+export type VagaListada = Vaga & { origem: OrigemDaVaga };
+
 export type Empresa = {
   slug: string;
   nome: string;
@@ -20,6 +26,14 @@ export type Empresa = {
   site: string;
 };
 
+export type Candidatura = {
+  vagaId: string;
+  nome: string;
+  email: string;
+  habilidades: string[];
+};
+
+// O "estado" que toda Server Action de formulário devolve para o useActionState.
 export type Estado = {
   ok: boolean;
   erros: Record<string, string>;
@@ -28,12 +42,3 @@ export type Estado = {
 };
 
 export const ESTADO_INICIAL: Estado = { ok: false, erros: {}, valores: {} };
-
-export type Candidatura = {
-  id: string;
-  vagaId: string;
-  nome: string;
-  email: string;
-  habilidades: string[];
-  enviadaEm: string;
-};

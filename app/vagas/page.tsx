@@ -1,39 +1,41 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
+import CabecalhoDaPagina from "@/components/compartilhados/CabecalhoDaPagina";
+import ListaDeVagas from "@/components/vagas/ListaDeVagas";
+import ListaEsqueleto from "@/components/vagas/ListaEsqueleto";
+import NumerosDoCatalogo from "@/components/vagas/NumerosDoCatalogo";
+import NumerosEsqueleto from "@/components/vagas/NumerosEsqueleto";
 import { listarVagas } from "@/lib/api";
-import NumerosDoCatalogo from "@/components/NumerosDoCatalogo";
-import NumerosEsqueleto from "@/components/NumerosEsqueleto";
-import ListaEsqueleto from "@/components/ListaEsqueleto";
-import CardDeVaga from "@/components/CardDeVaga";
 
-export const metadata: Metadata = { title: "Vagas", description: "Vagas de tecnologia para quem está migrando de carreira." };
+export const metadata: Metadata = {
+  title: "Vagas",
+  description:
+    "Vagas abertas em desenvolvimento, dados, qualidade e design, com destaque para as que aceitam pessoas iniciantes.",
+};
 
-export default function ListaDeVagas() { 
+// A página não é async: o título chega na hora, e quem busca são os filhos,
+// cada um no seu <Suspense>, para um bloco não segurar o outro.
+export default function PaginaDeVagas() {
   return (
     <section>
-      <div className="cabecalho-pagina">
-        <div>
-          <p className="eyebrow">Oportunidades</p>
-          <h1>Vagas de tecnologia</h1>
-        </div>
-        <Suspense fallback={<NumerosEsqueleto />}>
-          <NumerosDoCatalogo />
-        </Suspense>
-      </div>
+      <CabecalhoDaPagina
+        sobretitulo="Oportunidades"
+        titulo="Vagas de tecnologia"
+        descricao="Posições em desenvolvimento, dados, qualidade e design. O selo “Aceita iniciantes” indica as vagas abertas a quem está mudando de carreira."
+        acao={
+          <Suspense fallback={<NumerosEsqueleto />}>
+            <NumerosDoCatalogo />
+          </Suspense>
+        }
+      />
       <Suspense fallback={<ListaEsqueleto />}>
-        <ListagemDeVagas />
+        <Listagem />
       </Suspense>
     </section>
-  ); 
+  );
 }
 
-async function ListagemDeVagas() { 
-  const vagas = await listarVagas(); 
-  return (
-    <div className="lista-vagas" style={{ display: 'grid', gap: '1rem', listStyle: 'none', padding: 0 }}>
-      {vagas.map((vaga) => (
-        <CardDeVaga key={vaga.id} vaga={vaga} />
-      ))}
-    </div>
-  ); 
+async function Listagem() {
+  const vagas = await listarVagas();
+  return <ListaDeVagas vagas={vagas} />;
 }

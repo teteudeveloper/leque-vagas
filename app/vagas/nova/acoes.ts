@@ -2,40 +2,41 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { buscarEmpresa, guardarVaga } from "@/lib/api";
+import { comErros, falhaAoSalvar } from "@/lib/acoes";
 import { EsquemaDaVaga } from "@/lib/esquemas";
-import { porCampo, valoresDe } from "@/lib/formulario";
-import { guardarVaga, buscarEmpresa } from "@/lib/api";
-import type { Estado, Vaga } from "@/lib/tipos";
+import { camposDe, porCampo, valoresDe } from "@/lib/formulario";
+import type { Estado } from "@/lib/tipos";
 
-export async function criarVaga(
-  estadoAnterior: Estado,
-  dados: FormData,
-): Promise<Estado> {
+export async function criarVaga(_estadoAnterior: Estado, dados: FormData): Promise<Estado> {
   const valores = valoresDe(dados);
 
-  const analise = EsquemaDaVaga.safeParse(Object.fromEntries(dados));
-
+  const analise = EsquemaDaVaga.safeParse(camposDe(dados));
   if (!analise.success) {
-    return { ok: false, erros: porCampo(analise.error), valores };
+    return comErros(porCampo(analise.error), valores, "Confira os campos destacados.");
   }
 
-  const empresa = await buscarEmpresa(analise.data.empresaSlug);
-  if (!empresa) {
-    return {
-      ok: false,
-      erros: { empresaSlug: "Essa empresa não está cadastrada." },
-      valores,
-    };
+  const { empresaSlug, ...vaga } = analise.data;
+
+  let id: string;
+  try {
+    const empresa = await buscarEmpresa(empresaSlug);
+    if (!empresa) {
+      return comErros(
+        { empresaSlug: "Essa empresa não está cadastrada." },
+        valores,
+        "Confira os campos destacados.",
+      );
+    }
+    id = await guardarVaga({ ...vaga, empresaSlug, empresa: empresa.nome });
+  } catch (erro) {
+    return falhaAoSalvar("criar vaga", erro, valores);
   }
 
-  const vaga = {
-    ...analise.data,
-    id: crypto.randomUUID(),
-    empresa: empresa.nome,
-  };
-  await guardarVaga(vaga as Vaga);
+  revalidatePath("/vagas", "layout");
+  revalidatePath("/sitemap.xml");
+  revalidatePath(`/empresas/${empresaSlug}`);
 
-  revalidatePath("/vagas");
-
-  redirect(`/vagas/${vaga.id}`);
+  // redirect() lança um erro especial de propósito: fica FORA do try/catch.
+  redirect(`/vagas/${id}`);
 }
