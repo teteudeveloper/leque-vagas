@@ -1,18 +1,23 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+import { buttonVariants } from "@/components/ui/button";
+import EstadoDaPagina from "@/components/compartilhados/EstadoDaPagina";
+
+export const metadata: Metadata = { title: "Página não encontrada" };
+
 export default function NotFound() {
   return (
-    <section className="flex min-h-96 flex-col items-center justify-center text-center">
-      <span className="text-8xl font-black leading-none text-violet-700">404</span>
-      <h1 className="mt-5 text-4xl font-black tracking-tight text-slate-900">
-        Página não encontrada
-      </h1>
-      <p className="text-slate-600">O endereço que você tentou acessar não existe.</p>
-      <Link
-        className="mt-5 inline-flex rounded-lg bg-violet-600 px-5 py-3 font-semibold text-white hover:bg-violet-700"
-        href="/"
-      >
-        Voltar para a home
+    <EstadoDaPagina
+      destaque="404"
+      titulo="Página não encontrada"
+      descricao="O endereço que você tentou acessar não existe ou mudou de lugar."
+    >
+      <Link className={buttonVariants()} href="/">
+        Voltar para o início
       </Link>
-    </section>
+      <Link className={buttonVariants({ variant: "secondary" })} href="/vagas">
+        Ver vagas
+      </Link>
+    </EstadoDaPagina>
   );
 }

@@ -1,7 +1,25 @@
+# dependências
 node_modules/
+
+# build do Next.js
 .next/
 out/
-.vercel/
 *.tsbuildinfo
+
+# Vercel
+.vercel/
+
+# variáveis de ambiente (o modelo fica em .env.example)
 .env*
 !.env.example
+
+# banco SQLite antigo (o projeto agora usa PostgreSQL)
+prisma/*.db
+prisma/*.db-journal
+
+# arquivos do sistema
+.DS_Store
+npm-debug.log*
+
+# gerado pelo Next.js a cada dev/build (a documentação recomenda não versionar)
+next-env.d.ts

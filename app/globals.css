@@ -1,1 +1,19 @@
 @import "tailwindcss";
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-[#fffdfb] text-slate-900 antialiased;
+  }
+
+  ::selection {
+    @apply bg-violet-100 text-violet-900;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-violet-600;
+  }
+}

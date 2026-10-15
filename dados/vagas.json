@@ -1,0 +1,68 @@
+[
+  {
+    "id": "1",
+    "titulo": "Pessoa Desenvolvedora Front-end Júnior",
+    "empresa": "Aurora Tech",
+    "empresaSlug": "aurora-tech",
+    "area": "Front-end",
+    "senioridade": "Júnior",
+    "local": "Remoto",
+    "aceitaIniciante": true,
+    "descricao": "A Aurora Tech está ampliando o time responsável pela plataforma de autoatendimento que oferece a redes de varejo. Você vai trabalhar ao lado de pessoas desenvolvedoras sêniores, com revisão de código diária e um plano de desenvolvimento definido nos primeiros 90 dias.\n\nO que você vai fazer:\n- Construir telas e componentes em React e Next.js a partir dos protótipos do time de design\n- Escrever testes para os componentes que você criar\n- Corrigir problemas de acessibilidade e desempenho apontados pelas métricas do produto\n- Participar das cerimônias do time e das revisões de código\n\nO que esperamos:\n- Base sólida em HTML, CSS e JavaScript\n- Primeiros projetos com React, pessoais ou de cursos, publicados no GitHub\n- Vontade de aprender com feedback frequente\n\nDiferenciais:\n- Contato com TypeScript ou Tailwind CSS"
+  },
+  {
+    "id": "2",
+    "titulo": "Pessoa Analista de Dados Júnior",
+    "empresa": "Aurora Tech",
+    "empresaSlug": "aurora-tech",
+    "area": "Dados",
+    "senioridade": "Júnior",
+    "local": "Híbrido · Recife",
+    "aceitaIniciante": true,
+    "descricao": "O time de Dados da Aurora Tech apoia as áreas de produto e negócio com indicadores confiáveis. A pessoa que buscamos vai transformar dados de uso do produto em análises que orientam decisões de prioridade.\n\nO que você vai fazer:\n- Construir e manter painéis com os principais indicadores do produto\n- Escrever consultas SQL para responder a perguntas das áreas de negócio\n- Documentar métricas e definições para que todas as áreas falem a mesma língua\n- Apresentar resultados de forma clara para pessoas não técnicas\n\nO que esperamos:\n- SQL em nível intermediário, com consultas que usem junções e agregações\n- Prática com planilhas e com alguma ferramenta de visualização de dados, em cursos ou projetos pessoais\n- Capacidade de explicar números com objetividade\n\nDiferenciais:\n- Python para análise de dados\n- Experiência anterior em outra área que ajude a entender o negócio"
+  },
+  {
+    "id": "3",
+    "titulo": "Pessoa Desenvolvedora Back-end Júnior",
+    "empresa": "Nuvem Norte",
+    "empresaSlug": "nuvem-norte",
+    "area": "Back-end",
+    "senioridade": "Júnior",
+    "local": "Remoto",
+    "aceitaIniciante": true,
+    "descricao": "A Nuvem Norte desenvolve APIs para empresas de logística e varejo em todo o país. Você vai entrar em um squad com acompanhamento próximo de uma pessoa mentora, começando por tarefas bem definidas e ganhando autonomia aos poucos.\n\nO que você vai fazer:\n- Desenvolver e manter endpoints REST em Node.js com TypeScript\n- Escrever testes automatizados para as regras de negócio\n- Modelar tabelas e consultas em banco de dados relacional\n- Investigar e corrigir problemas reportados pelos clientes\n\nO que esperamos:\n- Conhecimento de JavaScript ou TypeScript no lado do servidor\n- Noções de HTTP, APIs REST e SQL\n- Uso de Git no dia a dia\n\nDiferenciais:\n- Contato com Docker\n- Projetos de back-end publicados no GitHub"
+  },
+  {
+    "id": "4",
+    "titulo": "Pessoa Engenheira de QA Pleno",
+    "empresa": "Nuvem Norte",
+    "empresaSlug": "nuvem-norte",
+    "area": "Qualidade",
+    "senioridade": "Pleno",
+    "local": "Híbrido · Fortaleza",
+    "aceitaIniciante": false,
+    "descricao": "A área de Qualidade da Nuvem Norte garante que cada entrega chegue aos clientes funcionando como prometido. Buscamos uma pessoa para estruturar testes de ponta a ponta e ajudar os squads a prevenir falhas antes que alcancem o ambiente de produção.\n\nO que você vai fazer:\n- Planejar e escrever cenários de teste a partir dos requisitos\n- Automatizar testes de API e de interface\n- Acompanhar indicadores de qualidade e propor melhorias no processo\n- Apoiar as pessoas desenvolvedoras na escrita de testes\n\nO que esperamos:\n- Experiência com testes manuais e automatizados\n- Conhecimento de alguma ferramenta de automação, como Cypress ou Playwright\n- Boa comunicação escrita para registrar falhas com clareza\n\nDiferenciais:\n- Experiência com testes de carga\n- Conhecimento de integração contínua"
+  },
+  {
+    "id": "5",
+    "titulo": "Pessoa Desenvolvedora Mobile Júnior",
+    "empresa": "Maré Digital",
+    "empresaSlug": "mare-digital",
+    "area": "Mobile",
+    "senioridade": "Júnior",
+    "local": "Remoto",
+    "aceitaIniciante": true,
+    "descricao": "A Maré Digital mantém um aplicativo de agendamentos usado por milhares de pessoas todos os dias. Você vai participar da evolução do app com apoio de um time que reserva tempo semanal para pareamento e estudo.\n\nO que você vai fazer:\n- Desenvolver novas telas e fluxos do aplicativo em React Native\n- Integrar o aplicativo às APIs do produto\n- Corrigir falhas reportadas pelas pessoas usuárias\n- Acompanhar as publicações nas lojas de aplicativos\n\nO que esperamos:\n- Conhecimentos básicos de JavaScript e React\n- Interesse em desenvolvimento mobile\n- Organização para trabalhar remotamente com autonomia\n\nDiferenciais:\n- Um aplicativo próprio publicado ou em desenvolvimento\n- Noções de acessibilidade em dispositivos móveis"
+  },
+  {
+    "id": "6",
+    "titulo": "Pessoa Product Designer Pleno",
+    "empresa": "Maré Digital",
+    "empresaSlug": "mare-digital",
+    "area": "Design",
+    "senioridade": "Pleno",
+    "local": "Remoto",
+    "aceitaIniciante": false,
+    "descricao": "O time de Produto da Maré Digital trabalha lado a lado com o time de Engenharia para criar experiências acessíveis. Buscamos uma pessoa designer para conduzir projetos do entendimento do problema até a entrega das telas.\n\nO que você vai fazer:\n- Conduzir entrevistas e testes de usabilidade com pessoas usuárias\n- Desenhar fluxos, protótipos e interfaces no Figma\n- Evoluir o design system do produto junto com a Engenharia\n- Garantir que as soluções atendam às diretrizes de acessibilidade\n\nO que esperamos:\n- Portfólio com projetos de produto digital\n- Domínio do Figma\n- Conhecimento das diretrizes de acessibilidade (WCAG)\n\nDiferenciais:\n- Experiência com pesquisa quantitativa\n- Contato com aplicativos móveis"
+  }
+]

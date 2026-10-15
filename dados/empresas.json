@@ -1,0 +1,20 @@
+[
+  {
+    "slug": "aurora-tech",
+    "nome": "Aurora Tech",
+    "sobre": "Empresa de produto digital que desenvolve plataformas de autoatendimento para o varejo. Mantém um programa estruturado de entrada para pessoas em transição de carreira, com mentoria e plano de desenvolvimento nos primeiros meses.",
+    "site": "https://aurora-tech.example.com"
+  },
+  {
+    "slug": "nuvem-norte",
+    "nome": "Nuvem Norte",
+    "sobre": "Consultoria de software especializada em APIs e qualidade de sistemas para empresas de logística e varejo. Trabalha em squads com mentoria próxima para quem está começando na área.",
+    "site": "https://nuvem-norte.example.com"
+  },
+  {
+    "slug": "mare-digital",
+    "nome": "Maré Digital",
+    "sobre": "Estúdio de aplicativos móveis que une design e engenharia para criar experiências acessíveis. Conta com um time remoto que reserva tempo toda semana para pareamento e estudo.",
+    "site": "https://mare-digital.example.com"
+  }
+]

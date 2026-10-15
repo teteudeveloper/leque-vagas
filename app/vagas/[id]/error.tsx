@@ -1,22 +1,24 @@
 "use client";
-export default function ErrorVaga({
-  reset,
+
+import Link from "next/link";
+import { Button, buttonVariants } from "@/components/ui/button";
+import EstadoDaPagina from "@/components/compartilhados/EstadoDaPagina";
+
+export default function ErroDaVaga({
+  retry,
 }: {
   error: Error & { digest?: string };
-  reset: () => void;
+  retry: () => void;
 }) {
   return (
-    <section className="flex min-h-96 flex-col items-center justify-center text-center">
-      <h1 className="text-4xl font-black tracking-tight text-slate-900">
-        Não conseguimos carregar esta vaga
-      </h1>
-      <p className="mt-3 text-slate-600">Algo inesperado aconteceu. Tente novamente.</p>
-      <button
-        className="mt-5 inline-flex rounded-lg bg-violet-600 px-5 py-3 font-semibold text-white hover:bg-violet-700"
-        onClick={() => reset()}
-      >
-        Tentar novamente
-      </button>
-    </section>
+    <EstadoDaPagina
+      titulo="Não conseguimos carregar esta vaga"
+      descricao="Não foi possível carregar as informações desta vaga. Tente novamente em alguns instantes ou consulte as demais vagas abertas."
+    >
+      <Button onClick={() => retry()}>Tentar novamente</Button>
+      <Link className={buttonVariants({ variant: "secondary" })} href="/vagas">
+        Ver todas as vagas
+      </Link>
+    </EstadoDaPagina>
   );
 }
