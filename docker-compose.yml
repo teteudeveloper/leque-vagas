@@ -1,0 +1,23 @@
+# Banco de desenvolvimento. Em produção, o DATABASE_URL aponta para o Postgres
+# gerenciado (Neon, Supabase ou Prisma Postgres).
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: leque-vagas-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: leque
+      POSTGRES_PASSWORD: leque
+      POSTGRES_DB: leque_vagas
+    ports:
+      - "127.0.0.1:5434:5432"
+    volumes:
+      - leque-vagas-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U leque -d leque_vagas"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  leque-vagas-db:
